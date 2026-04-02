@@ -6,13 +6,9 @@ import requests
 VN_TZ = timezone(timedelta(hours=7))
 
 
-def _get_friday_date() -> str:
+def build_payload() -> dict:
     now = datetime.now(VN_TZ)
-    return now.strftime("%d/%m/%Y")
-
-
-def build_card_payload() -> dict:
-    friday_date = _get_friday_date()
+    date_str = now.strftime("%d/%m/%Y")
 
     return {
         "cardsV2": [{
@@ -20,51 +16,22 @@ def build_card_payload() -> dict:
             "card": {
                 "header": {
                     "title": "Weekly Report Reminder",
-                    "subtitle": f"Friday, {friday_date}",
+                    "subtitle": f"Friday, {date_str}",
                     "imageUrl": "https://fonts.gstatic.com/s/i/short-term/release/googlesymbols/edit_note/default/48px.svg",
                     "imageType": "CIRCLE",
                 },
                 "sections": [
                     {
-                        "widgets": [
-                            {
-                                "decoratedText": {
-                                    "icon": {"knownIcon": "CLOCK"},
-                                    "topLabel": "Deadline",
-                                    "text": "<b>Today, 6:00 PM</b>",
-                                },
+                        "widgets": [{
+                            "textParagraph": {
+                                "text": (
+                                    "@Bui Khanh Hoang tạo cho a con bot vào nhóm JS Projects "
+                                    "nhắc project lead weekly report vào 4h chiều thứ 6 nhé"
+                                    "<br><br>a tin mỗi e"
+                                    "<br><br>🍻"
+                                ),
                             },
-                            {
-                                "decoratedText": {
-                                    "icon": {"knownIcon": "DESCRIPTION"},
-                                    "topLabel": "Action Required",
-                                    "text": "Submit your <b>weekly report</b>",
-                                },
-                            },
-                        ],
-                    },
-                    {
-                        "header": "Checklist",
-                        "widgets": [
-                            {
-                                "textParagraph": {
-                                    "text": (
-                                        "1. What did you accomplish this week?\n"
-                                        "2. What are your plans for next week?\n"
-                                        "3. Any blockers or risks?"
-                                    ),
-                                },
-                            },
-                        ],
-                    },
-                    {
-                        "widgets": [
-                            {
-                                "textParagraph": {
-                                    "text": "<i>Please submit on time. Thank you!</i>",
-                                },
-                            },
-                        ],
+                        }],
                     },
                 ],
             },
@@ -73,7 +40,7 @@ def build_card_payload() -> dict:
 
 
 def send_to_google_chat(webhook_url: str, dry_run: bool = False) -> bool:
-    payload = build_card_payload()
+    payload = build_payload()
 
     if dry_run:
         print(json.dumps(payload, indent=2))
