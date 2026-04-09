@@ -2,8 +2,8 @@ name: Weekly Report Reminder
 
 on:
   schedule:
-    # Runs at 3:30 PM GMT+7 (08:30 UTC) every Friday
-    - cron: "30 8 * * 5"
+    # Runs at 3:20 PM GMT+7 (08:20 UTC) every Friday
+    - cron: "20 8 * * 5"
   workflow_dispatch:
 
 jobs:
